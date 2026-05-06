@@ -1,0 +1,237 @@
+source_map:
+  guideline_url: https://oncology-association.ru/wp-content/uploads/2025/12/zno_rl_bronhov_proekt.pdf
+  note: Трассировка до разделов КР РФ 2025; при расширении пакета каждое новое правило
+    должно добавлять rule_sources entry.
+  rule_sources:
+    LC_DX_SUSPECT_LUNG_CANCER:
+      sections:
+      - 2.1 Жалобы и анамнез
+      - 2.4 Инструментальные диагностические исследования
+    LC_DX_INITIAL_WORKUP_COMPLETE:
+      sections:
+      - 2 Диагностика
+      - стадирование TNM
+      - ECOG PS
+    LC_DX_NSCLC_BIOMARKERS_REQUIRED_ADVANCED:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_TX_NSCLC_STAGE_I_OPERABLE:
+      sections:
+      - 3.1.1 Принципы лечения пациентов с I-II стадией НМРЛ
+    LC_TX_NSCLC_STAGE_II_IIIA_RESECTABLE:
+      sections:
+      - 3.1.1-3.1.2 Резектабельный НМРЛ
+    LC_TX_NSCLC_ADJUVANT_EGFR_OSIMERTINIB:
+      sections:
+      - адъювантная терапия EGFR del19/L858R
+    LC_TX_NSCLC_ADJUVANT_ALK_ALECTINIB:
+      sections:
+      - адъювантная таргетная терапия ALK
+    LC_TX_NSCLC_UNRESECTABLE_STAGE_III_CCRT:
+      sections:
+      - 3.1.2 Нерезектабельная III стадия НМРЛ
+    LC_TX_NSCLC_STAGE_III_DURVALUMAB_CONSOLIDATION:
+      sections:
+      - консолидирующий дурвалумаб после ХЛТ
+    LC_TX_NSCLC_STAGE_III_EGFR_OSIMERTINIB_AFTER_CCRT:
+      sections:
+      - осимертиниб после ХЛТ при EGFR del19/L858R
+    LC_TX_NSCLC_STAGE_IV_DRIVER_POSITIVE:
+      sections:
+      - 3.1.3 IV стадия НМРЛ
+      - таргетная терапия при EGFR/ALK/ROS1/BRAF
+    LC_TX_NSCLC_STAGE_IV_NO_DRIVER_PD_L1_HIGH:
+      sections:
+      - 3.1.3.1 Химиотерапия/иммунотерапия 1-й линии
+    LC_TX_SCLC_LIMITED:
+      sections:
+      - лечение МРЛ локализованной стадии
+    LC_TX_SCLC_EXTENSIVE:
+      sections:
+      - лечение МРЛ распространенной стадии
+    LC_FU_AFTER_RADICAL_YEARS_0_3:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_FU_AFTER_RADICAL_YEARS_4_5:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_FU_AFTER_RADICAL_AFTER_5_YEARS:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_FU_SCLC_NO_PCI_BRAIN_MRI:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_FU_DO_NOT_USE_PET_CT_ROUTINE_SURVEILLANCE:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_BW_TARGETED_THERAPY_REQUIREMENTS:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: prerequisites for selected treatment pathway'
+    LC_BW_DURVALUMAB_REQUIREMENTS:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: prerequisites for selected treatment pathway'
+    LC_BW_SURGERY_REQUIREMENTS:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: prerequisites for selected treatment pathway'
+    LC_BW_SCLC_CHEMORADIATION_REQUIREMENTS:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: prerequisites for selected treatment pathway'
+    LC_CTR_PLATINUM_RENAL_FAILURE:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_CISPLATIN_HEARING_NEUROPATHY:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_IMMUNOTHERAPY_AUTOIMMUNE:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_THORACIC_RT_INTERSTITIAL_LUNG_DISEASE:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_SURGERY_OPERABILITY:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_ANTICOAGULANTS_BIOPSY:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_TKI_QT_AND_INTERACTIONS:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_CTR_PEMETREXED_NONSQUAMOUS_ONLY:
+      sections:
+      - 3 Лечение
+      - 5.1 профилактика и лечение осложнений
+      - Приложение А3 лекарственные препараты
+    LC_DX_MISSING_TISSUE:
+      sections:
+      - 2 Диагностика заболевания
+      - 2.3-2.5 лабораторные, инструментальные и иные исследования
+    LC_DX_MISSING_STAGE:
+      sections:
+      - 2 Диагностика заболевания
+      - 2.3-2.5 лабораторные, инструментальные и иные исследования
+    LC_DX_NONSQUAMOUS_BIOMARKERS_REQUIRED:
+      sections:
+      - 2 Диагностика заболевания
+      - 2.3-2.5 лабораторные, инструментальные и иные исследования
+    LC_DX_RESECTABILITY_BOARD_REQUIRED:
+      sections:
+      - 2 Диагностика заболевания
+      - 2.3-2.5 лабораторные, инструментальные и иные исследования
+    LC_DX_SCLC_EXTENT_REQUIRED:
+      sections:
+      - 2 Диагностика заболевания
+      - 2.3-2.5 лабораторные, инструментальные и иные исследования
+    LC_FU_SMOKING_CESSATION:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_FU_COMPLICATIONS_SUPPORT:
+      sections:
+      - 5 Профилактика и диспансерное наблюдение
+    LC_INF_HISTOLOGY_NSCLC_GROUP:
+      sections:
+      - классификация НМРЛ
+    LC_INF_HISTOLOGY_SCLC_GROUP:
+      sections:
+      - классификация и лечение МРЛ
+    LC_INF_DRIVER_EGFR_COMMON:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_DRIVER_EGFR_ANY:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_DRIVER_ALK:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_DRIVER_ROS1:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_DRIVER_BRAF:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_PD_L1_HIGH:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_PD_L1_LOW_POSITIVE:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_PD_L1_NEGATIVE:
+      sections:
+      - 2.5 Иные диагностические исследования
+      - 3.1.3 IV стадия НМРЛ
+    LC_INF_METASTATIC_BY_M1:
+      sections:
+      - TNM/стадирование
+      - классификация НМРЛ и МРЛ
+    LC_INF_EARLY_RESECTABLE_BUCKET:
+      sections:
+      - TNM/стадирование
+      - классификация НМРЛ и МРЛ
+    LC_INF_UNRESECTABLE_STAGE_III_BUCKET:
+      sections:
+      - TNM/стадирование
+      - классификация НМРЛ и МРЛ
+    LC_INF_SCLC_LIMITED:
+      sections:
+      - классификация и лечение МРЛ
+    LC_INF_SCLC_EXTENSIVE:
+      sections:
+      - классификация и лечение МРЛ
+    LC_SC_HISTOLOGY_UNKNOWN:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: branching by missing histology/stage/biomarkers'
+    LC_SC_NSCLC_DRIVER_UNKNOWN_STAGE_IV:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: branching by missing histology/stage/biomarkers'
+    LC_SC_RESECTABILITY_UNKNOWN_STAGE_I_IIIA:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: branching by missing histology/stage/biomarkers'
+    LC_SC_SCLC_EXTENT_UNKNOWN:
+      sections:
+      - 2 Диагностика
+      - '3 Лечение: branching by missing histology/stage/biomarkers'
+    LC_TX_NSCLC_ADJUVANT_PD_L1_ATEZOLIZUMAB:
+      sections:
+      - 3 Лечение
+      - лекарственная терапия/лучевая терапия/хирургическое лечение по стадии и гистологии
+    LC_TX_NSCLC_NEOADJUVANT_IMMUNOCHEMO_SELECTED:
+      sections:
+      - 3 Лечение
+      - лекарственная терапия/лучевая терапия/хирургическое лечение по стадии и гистологии
+    LC_TX_NSCLC_STAGE_IV_NO_DRIVER_PD_L1_LOW_OR_NEGATIVE:
+      sections:
+      - 3 Лечение
+      - лекарственная терапия/лучевая терапия/хирургическое лечение по стадии и гистологии
+    LC_TX_POOR_PS_SUPPORTIVE:
+      sections:
+      - 3 Лечение
+      - лекарственная терапия/лучевая терапия/хирургическое лечение по стадии и гистологии

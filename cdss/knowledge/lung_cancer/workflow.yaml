@@ -1,0 +1,39 @@
+workflow:
+  id: lung_cancer_ru_workflow
+  label: Рак легкого — Clinical Knowledge Pack
+  tabs:
+    - id: complaints
+      label: Жалобы
+      captures: [cough, hemoptysis, dyspnea, chest_pain, weight_loss, fever, hoarseness, bone_pain, neurologic_symptoms]
+      ui_hint: checkbox_first
+    - id: anamnesis
+      label: Анамнез и риски
+      captures: [smoking_status, pack_years, passive_smoking, occupational_exposures, copd, prior_cancer, comorbidities, medications]
+      ui_hint: structured_dropdowns
+    - id: diagnostics
+      label: Диагностика
+      captures: [ct, pet_ct, brain_imaging, bone_scan, bronchoscopy, biopsy, ebus_eus, labs, ecog]
+      rule_groups: [diagnosis_rules]
+    - id: morphology
+      label: Морфология и биомаркеры
+      captures: [histology, ihc, egfr, alk, ros1, braf, kras, met, ret, ntrk, her2, pd_l1_tps]
+      rule_groups: [diagnosis_rules, inference_rules]
+    - id: staging
+      label: TNM/стадия
+      captures: [tnm_T, tnm_N, tnm_M, stage_group, sclc_extent, resectability, operability]
+      rule_groups: [inference_rules, scenario_rules]
+    - id: treatment
+      label: Лечение
+      captures: [intent, prior_treatment, treatment_preferences]
+      rule_groups: [treatment_rules, constraint_rules, backward_planning_rules]
+    - id: followup
+      label: Наблюдение
+      captures: [post_treatment_status, years_since_treatment, recurrence_status, complications]
+      rule_groups: [followup_rules]
+    - id: report
+      label: Отчет
+      outputs: [diagnosis, tnm, stage, histology, biomarkers, missing_data, scenarios, recommendations, constraints, followup]
+  global_actions:
+    - reset_all
+    - save_patient_state
+    - export_report

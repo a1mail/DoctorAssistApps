@@ -1,0 +1,221 @@
+treatment_rules:
+  - id: LC_TX_NSCLC_STAGE_I_OPERABLE
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: stage_i}
+        - {resectability: resectable}
+        - {operability: operable}
+    then:
+      recommend:
+        - surgery_lobectomy
+        - systematic_lymph_node_dissection
+      alternatives:
+        - stereotactic_rt_if_medically_inoperable_or_refuses_surgery
+      intent: curative
+      explain: "Операбельная I стадия НМРЛ направляется на радикальное хирургическое лечение; СЛТ — альтернатива при неоперабельности."
+
+  - id: LC_TX_NSCLC_STAGE_II_IIIA_RESECTABLE
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_ii, stage_iiia]}}
+        - {resectability: resectable}
+        - {operability: operable}
+    then:
+      recommend:
+        - surgery_lobectomy_or_pneumonectomy_as_indicated
+        - systematic_lymph_node_dissection
+        - perioperative_or_adjuvant_platinum_based_therapy
+      intent: curative
+      explain: "Резектабельный НМРЛ II-IIIA требует радикальной операции и рассмотрения системного периоперационного/адъювантного этапа."
+
+  - id: LC_TX_NSCLC_ADJUVANT_EGFR_OSIMERTINIB
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_ib, stage_ii, stage_iiia]}}
+        - {biomarkers: {any: [egfr_ex19del, egfr_l858r]}}
+        - {postoperative_status: radically_resected}
+    then:
+      recommend:
+        - osimertinib_3_years
+      sequencing:
+        - after_adjuvant_platinum_or_when_chemotherapy_not_used
+      intent: adjuvant_risk_reduction
+      explain: "После радикальной резекции при EGFR del19/L858R показан адъювантный осимертиниб."
+
+  - id: LC_TX_NSCLC_ADJUVANT_ALK_ALECTINIB
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {biomarkers: {contains: alk_rearrangement}}
+        - {postoperative_status: radically_resected}
+        - {stage_group: {in: [stage_ib, stage_ii, stage_iiia]}}
+    then:
+      recommend: [alectinib_2_years]
+      intent: adjuvant_risk_reduction
+      explain: "При ALK-положительном резецированном НМРЛ возможно адъювантное таргетное лечение алектинибом."
+
+  - id: LC_TX_NSCLC_ADJUVANT_PD_L1_ATEZOLIZUMAB
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {postoperative_status: radically_resected}
+        - {adjuvant_platinum_completed: true}
+        - {pd_l1_tps: {gte: 50}}
+        - {biomarkers: {not_any: [egfr_ex19del, egfr_l858r, alk_rearrangement]}}
+    then:
+      recommend: [atezolizumab_1_year]
+      intent: adjuvant_risk_reduction
+      explain: "После адъювантной ХТ при PD-L1 ≥50% и отсутствии EGFR/ALK может рассматриваться атезолизумаб."
+
+  - id: LC_TX_NSCLC_NEOADJUVANT_IMMUNOCHEMO_SELECTED
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_ib, stage_ii, stage_iiia]}}
+        - {resectability: resectable}
+        - {multidisciplinary_board: recommends_neoadjuvant}
+        - {no_immunotherapy_contraindication: true}
+    then:
+      recommend:
+        - pembrolizumab_plus_platinum_doublet_then_adjuvant_pembrolizumab
+        - nivolumab_plus_platinum_doublet_selected_cases
+      intent: perioperative_curative
+      explain: "Для отдельных резектабельных пациентов может быть выбран периоперационный химиоиммунный маршрут решением консилиума."
+
+  - id: LC_TX_NSCLC_UNRESECTABLE_STAGE_III_CCRT
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_iiia, stage_iiib, stage_iiic]}}
+        - {resectability: unresectable}
+        - {ecog: {in: [0, 1]}}
+        - {organ_function_allows_platinum: true}
+    then:
+      recommend:
+        - concurrent_chemoradiation
+      alternatives:
+        - sequential_chemoradiation_if_concurrent_not_tolerated
+      intent: curative
+      explain: "Нерезектабельная III стадия при удовлетворительном состоянии — кандидат для радикальной ХЛТ."
+
+  - id: LC_TX_NSCLC_STAGE_III_DURVALUMAB_CONSOLIDATION
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_iiia, stage_iiib, stage_iiic]}}
+        - {chemoradiation_completed: true}
+        - {progression_after_chemoradiation: false}
+        - {biomarkers: {not_any: [egfr_ex19del, egfr_l858r, alk_rearrangement]}}
+        - {pd_l1_tps: {gte: 1}}
+        - {no_immunotherapy_contraindication: true}
+    then:
+      recommend:
+        - durvalumab_consolidation_up_to_12_months
+      start_window: as_soon_as_possible_preferably_within_60_days
+      intent: consolidation
+      explain: "После ХЛТ без прогрессирования при PD-L1 ≥1% и без EGFR/ALK рекомендуется консолидирующий дурвалумаб."
+
+  - id: LC_TX_NSCLC_STAGE_III_EGFR_OSIMERTINIB_AFTER_CCRT
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_iiia, stage_iiib, stage_iiic]}}
+        - {chemoradiation_completed: true}
+        - {progression_after_chemoradiation: false}
+        - {biomarkers: {any: [egfr_ex19del, egfr_l858r]}}
+    then:
+      recommend: [osimertinib_until_progression_or_toxicity]
+      intent: consolidation_targeted
+      explain: "При EGFR del19/L858R после ХЛТ рекомендована поддерживающая таргетная терапия осимертинибом."
+
+  - id: LC_TX_NSCLC_STAGE_IV_DRIVER_POSITIVE
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: stage_iv}
+        - {driver_positive: true}
+    then:
+      recommend:
+        - matched_targeted_therapy
+      avoid_until_driver_known:
+        - upfront_immunotherapy_when_driver_testing_pending
+      intent: palliative_life_prolonging
+      explain: "При IV стадии НМРЛ с драйверным нарушением приоритет имеет соответствующая таргетная терапия."
+
+  - id: LC_TX_NSCLC_STAGE_IV_NO_DRIVER_PD_L1_HIGH
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: stage_iv}
+        - {driver_positive: false}
+        - {pd_l1_tps: {gte: 50}}
+        - {no_immunotherapy_contraindication: true}
+    then:
+      recommend:
+        - immune_checkpoint_inhibitor_monotherapy_or_chemoimmunotherapy
+      intent: palliative_life_prolonging
+      explain: "При отсутствии драйверов и PD-L1 ≥50% возможна ИТ или химиоиммунотерапия с учетом клинических факторов."
+
+  - id: LC_TX_NSCLC_STAGE_IV_NO_DRIVER_PD_L1_LOW_OR_NEGATIVE
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: stage_iv}
+        - {driver_positive: false}
+        - {pd_l1_tps: {lt: 50}}
+        - {ecog: {in: [0, 1, 2]}}
+    then:
+      recommend:
+        - platinum_doublet
+        - consider_chemoimmunotherapy_if_no_contraindication
+      histology_specific:
+        nonsquamous: pemetrexed_platinum_based_options
+        squamous: gemcitabine_or_taxane_platinum_based_options
+      intent: palliative_life_prolonging
+      explain: "При отсутствии драйверов и PD-L1 <50% базовый выбор — платиносодержащая ХТ/химиоиммунотерапия по гистологии и переносимости."
+
+  - id: LC_TX_SCLC_LIMITED
+    if:
+      all:
+        - {histology_group: sclc}
+        - {sclc_extent: limited}
+        - {ecog: {in: [0, 1, 2]}}
+    then:
+      recommend:
+        - platinum_etoposide
+        - thoracic_radiotherapy_concurrent_or_early
+        - consider_prophylactic_cranial_irradiation_or_mri_surveillance_after_response
+      intent: curative_or_long_control
+      explain: "Локализованный МРЛ требует платино-этопозидной ХТ с лучевым компонентом при переносимости."
+
+  - id: LC_TX_SCLC_EXTENSIVE
+    if:
+      all:
+        - {histology_group: sclc}
+        - {sclc_extent: extensive}
+        - {ecog: {in: [0, 1, 2]}}
+    then:
+      recommend:
+        - platinum_etoposide
+        - consider_add_pd_l1_inhibitor_per_availability_and_contraindications
+        - palliative_radiotherapy_for_symptoms
+      intent: palliative_life_prolonging
+      explain: "Распространенный МРЛ лечится системно; лучевая терапия используется для контроля симптомов/очагов."
+
+  - id: LC_TX_POOR_PS_SUPPORTIVE
+    if:
+      any:
+        ecog: [3, 4]
+        severe_uncontrolled_comorbidity: true
+    then:
+      recommend:
+        - best_supportive_care
+        - symptom_control
+        - palliative_care_consult
+      conditional:
+        - systemic_therapy_only_if_ps_decline_due_to_tumor_and_reversible
+      intent: supportive
+      explain: "При ECOG 3-4 или неконтролируемой коморбидности приоритет — симптоматическая и паллиативная помощь; системное лечение только при обоснованной обратимости состояния."

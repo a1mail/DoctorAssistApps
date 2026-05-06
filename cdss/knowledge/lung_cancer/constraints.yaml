@@ -1,0 +1,106 @@
+constraint_rules:
+  - id: LC_CTR_PLATINUM_RENAL_FAILURE
+    applies_to: [cisplatin, platinum_doublet]
+    if:
+      any:
+        comorbidities: [renal_failure]
+        creatinine_clearance: {lt: 60}
+    then:
+      action: modify_or_avoid
+      options:
+        - consider_carboplatin_instead_of_cisplatin
+        - nephrology_consult
+        - hydrate_and_monitor_creatinine
+      explain: "Почечная недостаточность ограничивает применение цисплатина и требует коррекции режима."
+
+  - id: LC_CTR_CISPLATIN_HEARING_NEUROPATHY
+    applies_to: [cisplatin]
+    if:
+      any:
+        comorbidities: [hearing_loss_neuropathy]
+        toxicity.baseline_neuropathy_grade: {gte: 2}
+    then:
+      action: avoid_or_substitute
+      options: [consider_carboplatin, neurology_or_audiology_assessment]
+      explain: "Цисплатин может ухудшать нейро- и ототоксичность."
+
+  - id: LC_CTR_IMMUNOTHERAPY_AUTOIMMUNE
+    applies_to: [durvalumab, atezolizumab, pembrolizumab, nivolumab, pd1_pdl1_inhibitors]
+    if:
+      any:
+        comorbidities: [autoimmune_disease_active]
+        immunosuppression_high_dose: true
+        active_pneumonitis: true
+    then:
+      action: contraindication_or_specialist_review
+      required_actions:
+        - assess_autoimmune_activity
+        - document_risk_benefit
+        - multidisciplinary_decision
+      explain: "Активное аутоиммунное заболевание/пневмонит повышает риск тяжелой иммуноопосредованной токсичности."
+
+  - id: LC_CTR_THORACIC_RT_INTERSTITIAL_LUNG_DISEASE
+    applies_to: [thoracic_radiotherapy, concurrent_chemoradiation, stereotactic_rt]
+    if:
+      any:
+        comorbidities: [interstitial_lung_disease]
+        pulmonary_function_severely_limited: true
+    then:
+      action: high_risk_modify_plan
+      required_actions:
+        - radiation_oncologist_review
+        - pulmonary_function_testing
+        - dose_volume_constraint_review
+      explain: "Интерстициальное заболевание легких и низкие функциональные резервы повышают риск лучевого пневмонита."
+
+  - id: LC_CTR_SURGERY_OPERABILITY
+    applies_to: [surgery_lobectomy, surgery_pneumonectomy]
+    if:
+      any:
+        operability: inoperable
+        predicted_postoperative_fev1_dlco_low: true
+        uncontrolled_heart_failure: true
+    then:
+      action: avoid_surgery_or_optimize_first
+      alternatives:
+        - stereotactic_rt_for_early_stage
+        - definitive_chemoradiation_for_locally_advanced
+      explain: "Хирургия требует функциональной операбельности и приемлемого кардиопульмонального риска."
+
+  - id: LC_CTR_ANTICOAGULANTS_BIOPSY
+    applies_to: [bronchoscopy_biopsy, transthoracic_biopsy, thoracoscopy]
+    if:
+      any:
+        medications: [warfarin, doac, therapeutic_heparin, antiplatelet_dual]
+        coagulation_uncontrolled: true
+    then:
+      action: procedural_bleeding_plan_required
+      required_actions:
+        - check_coagulation
+        - peri_procedural_anticoagulation_plan
+        - balance_thrombosis_bleeding_risk
+      explain: "Инвазивная биопсия на фоне антикоагулянтов требует плана управления кровотечением."
+
+  - id: LC_CTR_TKI_QT_AND_INTERACTIONS
+    applies_to: [osimertinib, alectinib, other_tki]
+    if:
+      any:
+        baseline_qtc_prolonged: true
+        medications: [strong_cyp3a_inducer, qt_prolonging_drug]
+        severe_hepatic_impairment: true
+    then:
+      action: interaction_and_monitoring_required
+      required_actions:
+        - medication_reconciliation
+        - ecg_monitoring
+        - liver_function_monitoring
+      explain: "Перед ТКИ требуется оценка лекарственных взаимодействий, QT и функции печени."
+
+  - id: LC_CTR_PEMETREXED_NONSQUAMOUS_ONLY
+    applies_to: [pemetrexed]
+    if:
+      any:
+        histology: [squamous_nsclc, small_cell]
+    then:
+      action: do_not_use_for_this_histology
+      explain: "Пеметрекседные режимы предназначены для неплоскоклеточного НМРЛ."

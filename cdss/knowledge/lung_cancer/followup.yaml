@@ -1,0 +1,85 @@
+followup_rules:
+  - id: LC_FU_AFTER_RADICAL_YEARS_0_3
+    if:
+      all:
+        - {post_treatment_status: after_radical_treatment}
+        - {years_since_radical_treatment: {gte: 0, lt: 3}}
+        - {general_condition: satisfactory}
+    then:
+      schedule:
+        oncology_visit: every_3_months
+        physical_exam: every_visit
+        chest_xray_or_ct: per_visit_or_clinical_indication
+        abdomen_us_or_ct: periodic
+        brain_mri_or_ct_contrast: annually_or_symptoms
+        bone_scan: annually_or_symptoms
+      explain: "После радикального лечения первые 3 года требуется осмотр онколога каждые 3 месяца и плановое инструментальное наблюдение."
+
+  - id: LC_FU_AFTER_RADICAL_YEARS_4_5
+    if:
+      all:
+        - {post_treatment_status: after_radical_treatment}
+        - {years_since_radical_treatment: {gte: 3, lt: 5}}
+        - {general_condition: satisfactory}
+    then:
+      schedule:
+        oncology_visit: every_6_months
+        physical_exam: every_visit
+        annual_systemic_imaging: true
+      explain: "На 4-5 годах после радикального лечения визиты проводятся каждые 6 месяцев."
+
+  - id: LC_FU_AFTER_RADICAL_AFTER_5_YEARS
+    if:
+      all:
+        - {post_treatment_status: after_radical_treatment}
+        - {years_since_radical_treatment: {gte: 5}}
+    then:
+      schedule:
+        oncology_visit: yearly
+        surveillance: yearly
+      explain: "После 5 лет рекомендовано ежегодное наблюдение."
+
+  - id: LC_FU_SCLC_NO_PCI_BRAIN_MRI
+    if:
+      all:
+        - {histology_group: sclc}
+        - {prophylactic_cranial_irradiation_done: false}
+        - {years_since_treatment_start: {lt: 2}}
+    then:
+      schedule:
+        brain_mri: every_3_to_4_months_for_2_years
+      explain: "При МРЛ без профилактического облучения головного мозга требуется МРТ каждые 3-4 месяца первые 2 года."
+
+  - id: LC_FU_DO_NOT_USE_PET_CT_ROUTINE_SURVEILLANCE
+    if: {post_treatment_status: after_radical_treatment}
+    then:
+      not_recommended:
+        - routine_pet_ct_surveillance
+      explain: "ПЭТ-КТ не используется как рутинный метод диспансерного наблюдения."
+
+  - id: LC_FU_SMOKING_CESSATION
+    if:
+      any:
+        risk_factors: [active_smoking, passive_smoking]
+        current_smoking: true
+    then:
+      recommend:
+        - smoking_cessation_counseling
+        - avoid_passive_smoking
+        - document_pack_years
+      explain: "Отказ от активного и пассивного курения необходим для профилактики и улучшения результатов лечения."
+
+  - id: LC_FU_COMPLICATIONS_SUPPORT
+    if:
+      any:
+        active_systemic_therapy: true
+        thoracic_radiotherapy: true
+    then:
+      monitor:
+        - nausea_vomiting_and_antiemetic_need
+        - cytopenias
+        - renal_and_hepatic_function
+        - pneumonitis_symptoms
+        - nutritional_status
+        - distress_anxiety_depression
+      explain: "Во время лекарственной и лучевой терапии требуется профилактика осложнений, нутритивная и психоонкологическая поддержка."
