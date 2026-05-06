@@ -15,6 +15,7 @@ backward_planning_rules:
       - obtain_or_repeat_biopsy_if_insufficient_material
       - order_molecular_testing_or_NGS
       - delay_nonurgent_immunotherapy_until_driver_status_known_when_possible
+    explain: "Для подбора таргетной терапии при распространенном НМРЛ требуется подтвердить драйверное нарушение и базовую пригодность к системному лечению."
 
   - id: LC_BW_DURVALUMAB_REQUIREMENTS
     target_treatment: durvalumab_consolidation
@@ -33,6 +34,7 @@ backward_planning_rules:
       - restage_for_progression
       - confirm_PD_L1_and_EGFR_ALK
       - screen_for_pneumonitis_and_autoimmune_disease
+    explain: "Консолидирующий дурвалумаб требует завершенной радикальной ХЛТ, отсутствия прогрессирования, профиля PD-L1/EGFR/ALK и оценки противопоказаний к иммунотерапии."
 
   - id: LC_BW_SURGERY_REQUIREMENTS
     target_treatment: lung_resection
@@ -52,6 +54,7 @@ backward_planning_rules:
       - complete_staging
       - perform_EBUS_EUS_or_mediastinoscopy_if_indicated
       - assess_FEV1_DLCO_and_predicted_postoperative_values
+    explain: "Хирургический маршрут требует подтверждения резектабельной стадии, исключения отдаленных метастазов и оценки функциональной операбельности."
 
   - id: LC_BW_SCLC_CHEMORADIATION_REQUIREMENTS
     target_treatment: sclc_limited_chemoradiation
@@ -67,3 +70,4 @@ backward_planning_rules:
       - determine_limited_vs_extensive_stage
       - document_radiation_feasibility
       - assess_platinum_fitness
+    explain: "Для ХЛТ при локализованном МРЛ нужно подтвердить ограниченную распространенность, возможность лучевой терапии и переносимость платино-этопозидного режима."
