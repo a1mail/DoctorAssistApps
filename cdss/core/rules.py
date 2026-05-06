@@ -43,17 +43,19 @@ class RuleEngine:
                 when_missing = rule.get("when_missing")
                 if isinstance(when_missing, list) and not self.matcher.any_missing(when_missing, frozen_state):
                     continue
-                output = self._rule_output(rule)
-                matches.append(
-                    RuleMatch.from_rule(
-                        rule_id=str(rule["id"]),
-                        rule_group=group_name,
-                        source_file=filename,
-                        explain=self._explain(rule, output),
-                        output=output,
-                    )
-                )
+                matches.append(self.create_match(rule, rule_group=group_name, source_file=filename))
         return DecisionResult(tuple(matches))
+
+    def create_match(self, rule: Mapping[str, Any], *, rule_group: str, source_file: str) -> RuleMatch:
+        """Create an explainable match object for a rule that already matched."""
+        output = self.rule_output(rule)
+        return RuleMatch.from_rule(
+            rule_id=str(rule["id"]),
+            rule_group=rule_group,
+            source_file=source_file,
+            explain=self.explain(rule, output),
+            output=output,
+        )
 
     def infer(self, pack: KnowledgePack, patient_state: Mapping[str, Any]) -> Mapping[str, Any]:
         """Return a new state with matching `then.derive` payloads applied.
@@ -73,7 +75,7 @@ class RuleEngine:
                     next_state.update(deepcopy(dict(then["derive"])))
         return MappingProxyType(next_state)
 
-    def _rule_output(self, rule: Mapping[str, Any]) -> Mapping[str, Any]:
+    def rule_output(self, rule: Mapping[str, Any]) -> Mapping[str, Any]:
         then = rule.get("then")
         if isinstance(then, Mapping):
             return MappingProxyType(deepcopy(dict(then)))
@@ -84,7 +86,7 @@ class RuleEngine:
                 output[key] = deepcopy(value)
         return MappingProxyType(output)
 
-    def _explain(self, rule: Mapping[str, Any], output: Mapping[str, Any]) -> str:
+    def explain(self, rule: Mapping[str, Any], output: Mapping[str, Any]) -> str:
         direct_explain = rule.get("explain")
         if isinstance(direct_explain, str):
             return direct_explain

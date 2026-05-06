@@ -8,6 +8,7 @@ This package contains the first runtime layer for YAML/DSL Clinical Knowledge Pa
 - `matcher.py` evaluates deterministic YAML `if` conditions against patient state.
 - `rules.py` executes rule groups and returns explainable `DecisionResult` objects.
 - `decision.py` defines immutable result models with `rule_id`, `explain`, and rule outputs.
+- `pipeline.py` orchestrates forward and backward clinical workflows over validated packs.
 - `validation.py` validates structural safety before execution:
   - required metadata/source fields;
   - entity shape and duplicate entity IDs;
