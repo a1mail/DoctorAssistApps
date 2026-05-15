@@ -1,0 +1,14 @@
+id: sclc_limited
+description: Локализованный МРЛ, проверяет группировку МРЛ и комбинированный маршрут лечения.
+patient_state:
+  histology: small_cell
+  sclc_extent: limited
+  ecog: 1
+expected:
+  inferred_state:
+    histology_group: sclc
+    treatment_intent: curative_chemoradiation_based
+  matched_rule_ids:
+    - LC_DX_SCLC_EXTENT_REQUIRED
+    - LC_TX_SCLC_LIMITED
+  report_sections: [diagnosis, recommendations]

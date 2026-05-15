@@ -41,16 +41,9 @@ This roadmap keeps the project aligned with the Patient State Architecture and t
 
 ### Priority 3 — Clinical fixtures and regression tests
 
-- Add patient fixtures for core clinical scenarios:
-  - NSCLC stage I operable;
-  - NSCLC stage III unresectable after chemoradiation;
-  - NSCLC stage IV EGFR-positive;
-  - NSCLC stage IV driver-negative PD-L1 high;
-  - SCLC limited;
-  - SCLC extensive;
-  - missing histology;
-  - missing biomarkers.
-- Assert expected matched rule IDs, missing data, recommendations, constraints, follow-up, and report sections.
+- ✅ Added fixture regression coverage for NSCLC stage IV EGFR-positive, NSCLC stage IV driver-negative PD-L1 high, NSCLC stage III after chemoradiation, SCLC limited, missing histology, and constraints/follow-up.
+- ✅ Assert expected inferred states, matched rule IDs, report sections, and report JSON serializability.
+- Next: add additional fixtures for NSCLC stage I operable, SCLC extensive, missing biomarkers, and future TNM derivation cases.
 
 ### Priority 4 — Exporters and storage
 
@@ -64,8 +57,8 @@ This roadmap keeps the project aligned with the Patient State Architecture and t
 
 ## Current next best implementation step
 
-Implement **clinical fixtures and regression tests**:
+Implement **lung cancer pack deepening with TNM derivation**:
 
-1. Add reusable patient fixtures for representative lung cancer scenarios.
-2. Assert expected matched rule IDs, missing data, recommendations, constraints, follow-up, and report sections.
-3. Use fixtures to protect future knowledge-pack deepening work, including `tnm.yaml`.
+1. Add dedicated `tnm.yaml` with deterministic T/N/M derivation rules.
+2. Update loader/schema validation for the new TNM rule group.
+3. Add fixture cases that prove TNM derivation works and remains regression-protected.

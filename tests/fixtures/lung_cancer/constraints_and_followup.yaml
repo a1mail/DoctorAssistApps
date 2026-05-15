@@ -1,0 +1,13 @@
+id: constraints_and_followup
+description: Почечная недостаточность и раннее наблюдение после радикального лечения.
+patient_state:
+  comorbidities: [renal_failure]
+  creatinine_clearance: 45
+  post_treatment_status: after_radical_treatment
+  years_since_radical_treatment: 1
+  general_condition: satisfactory
+expected:
+  matched_rule_ids:
+    - LC_CTR_PLATINUM_RENAL_FAILURE
+    - LC_FU_AFTER_RADICAL_YEARS_0_3
+  report_sections: [constraints, followup]

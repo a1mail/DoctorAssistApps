@@ -8,3 +8,4 @@ Applications which assist doctors in patient diagnosis, treatment and management
 - `cdss/core/` — MVP loader and structural validator for YAML/DSL Clinical Knowledge Packs.
 - `cdss/reporting/` — report-ready transformation of explainable pipeline results for future UI/DOCX/PDF exporters.
 - `docs/ROADMAP.md` — implementation roadmap and remaining project plan.
+- `docs/PROJECT_HISTORY.md` — cumulative session log and recovery handoff.

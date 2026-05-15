@@ -1,0 +1,9 @@
+id: missing_histology
+description: Пустое состояние, проверяет missing-data planning и сценарные ветви.
+patient_state: {}
+expected:
+  matched_rule_ids:
+    - LC_SC_HISTOLOGY_UNKNOWN
+    - LC_DX_MISSING_TISSUE
+    - LC_DX_MISSING_STAGE
+  report_sections: [missing_data, scenarios]
