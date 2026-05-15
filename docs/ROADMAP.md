@@ -28,9 +28,9 @@ This roadmap keeps the project aligned with the Patient State Architecture and t
 
 ### Priority 1 — Clinical schema hardening
 
-- Add explicit schemas for patient state namespaces and rule outputs.
-- Normalize enum-like values such as stages, treatment IDs, and biomarker IDs.
-- Add validator checks that rule references point to known entities or declared constants.
+- ✅ Added explicit runtime schema metadata for supported rule groups, patient-state fields, condition operators, and rule-output keys.
+- ✅ Added validator checks for unknown condition operators, unknown patient-state fields, and unknown output keys.
+- Next: normalize enum-like values such as stages, treatment IDs, and biomarker IDs into reusable constants.
 
 ### Priority 2 — Lung cancer pack deepening
 
@@ -64,8 +64,8 @@ This roadmap keeps the project aligned with the Patient State Architecture and t
 
 ## Current next best implementation step
 
-Implement **clinical schema hardening**:
+Implement **clinical fixtures and regression tests**:
 
-1. Introduce `cdss/core/schema.py` with declared patient-state namespaces and rule-output keys.
-2. Extend the validator to warn/error on unknown rule references and undeclared constants.
-3. Add tests proving the current lung cancer pack passes the stricter validation.
+1. Add reusable patient fixtures for representative lung cancer scenarios.
+2. Assert expected matched rule IDs, missing data, recommendations, constraints, follow-up, and report sections.
+3. Use fixtures to protect future knowledge-pack deepening work, including `tnm.yaml`.

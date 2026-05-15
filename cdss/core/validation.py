@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any, Iterable, Literal, Mapping
 
 from .loader import KnowledgePack
+from .schema import DEFAULT_SCHEMA, KnowledgePackSchema
 
 Severity = Literal["error", "warning"]
 
@@ -54,6 +55,9 @@ class ValidationReport:
 class KnowledgePackValidator:
     """Run deterministic structural checks over a loaded knowledge pack."""
 
+    def __init__(self, schema: KnowledgePackSchema = DEFAULT_SCHEMA) -> None:
+        self.schema = schema
+
     def validate(self, pack: KnowledgePack) -> ValidationReport:
         issues: list[ValidationIssue] = []
         issues.extend(self._validate_metadata(pack))
@@ -62,6 +66,7 @@ class KnowledgePackValidator:
         issues.extend(self._validate_rule_explainability(pack))
         issues.extend(self._validate_source_map_coverage(pack))
         issues.extend(self._validate_workflow_rule_groups(pack))
+        issues.extend(self._validate_rule_schema(pack))
         return ValidationReport(tuple(issues))
 
     def _validate_metadata(self, pack: KnowledgePack) -> Iterable[ValidationIssue]:
@@ -197,6 +202,98 @@ class KnowledgePackValidator:
                         location,
                         f"Workflow references unknown rule group `{group_name}`.",
                     )
+
+
+    def _validate_rule_schema(self, pack: KnowledgePack) -> Iterable[ValidationIssue]:
+        for filename, group_name, rules in pack.iter_rule_groups():
+            if group_name not in self.schema.rule_groups:
+                yield self._warning(
+                    "UNKNOWN_RULE_GROUP",
+                    f"{filename}:{group_name}",
+                    f"Rule group `{group_name}` is not declared in the runtime schema.",
+                )
+            for index, rule in enumerate(rules):
+                if not isinstance(rule, Mapping):
+                    continue
+                location = f"{filename}:{group_name}[{index}]"
+                for key in rule.keys():
+                    if key not in self.schema.rule_top_level_keys:
+                        yield self._warning("UNKNOWN_RULE_KEY", location, f"Rule key `{key}` is not declared in the DSL schema.")
+                condition = rule.get("if")
+                if condition is not None:
+                    yield from self._validate_condition_schema(condition, f"{location}.if")
+                then = rule.get("then")
+                if isinstance(then, Mapping):
+                    yield from self._validate_output_schema(then, f"{location}.then")
+                else:
+                    output = {
+                        key: value
+                        for key, value in rule.items()
+                        if key not in {"id", "if", "description", "target_treatment", "applies_to", "when_missing"}
+                    }
+                    yield from self._validate_output_schema(output, location)
+
+    def _validate_condition_schema(self, condition: Any, location: str) -> Iterable[ValidationIssue]:
+        if isinstance(condition, list):
+            for index, item in enumerate(condition):
+                yield from self._validate_condition_schema(item, f"{location}[{index}]")
+            return
+        if not isinstance(condition, Mapping):
+            return
+
+        for key, value in condition.items():
+            key_location = f"{location}.{key}"
+            if key in self.schema.logical_condition_keys:
+                yield from self._validate_condition_schema(value, key_location)
+                continue
+            if key not in self.schema.patient_state_fields:
+                yield self._warning(
+                    "UNKNOWN_PATIENT_STATE_FIELD",
+                    key_location,
+                    f"Condition field `{key}` is not declared in the patient-state schema.",
+                )
+            if isinstance(value, Mapping):
+                operator_keys = set(value.keys())
+                known_operator_keys = operator_keys & set(self.schema.condition_operators)
+                if known_operator_keys:
+                    for operator in operator_keys - set(self.schema.condition_operators):
+                        yield self._error(
+                            "UNKNOWN_CONDITION_OPERATOR",
+                            f"{key_location}.{operator}",
+                            f"Condition operator `{operator}` is not supported by the matcher schema.",
+                        )
+                    continue
+                suspicious_operator_keys = {operator for operator in operator_keys if str(operator).endswith("_op")}
+                for operator in suspicious_operator_keys:
+                    yield self._error(
+                        "UNKNOWN_CONDITION_OPERATOR",
+                        f"{key_location}.{operator}",
+                        f"Condition operator `{operator}` is not supported by the matcher schema.",
+                    )
+            yield from self._validate_condition_schema(value, key_location)
+
+    def _validate_output_schema(self, output: Mapping[str, Any], location: str) -> Iterable[ValidationIssue]:
+        for key in output.keys():
+            if key == "schedule" and isinstance(output[key], Mapping):
+                for schedule_key in output[key].keys():
+                    if schedule_key not in self.schema.schedule_keys:
+                        yield self._warning(
+                            "UNKNOWN_SCHEDULE_KEY",
+                            f"{location}.schedule.{schedule_key}",
+                            f"Schedule key `{schedule_key}` is not declared in the DSL schema.",
+                        )
+                continue
+            if key == "derive" and isinstance(output[key], Mapping):
+                for derived_key in output[key].keys():
+                    if derived_key not in self.schema.derived_state_keys:
+                        yield self._warning(
+                            "UNKNOWN_DERIVED_STATE_KEY",
+                            f"{location}.derive.{derived_key}",
+                            f"Derived state key `{derived_key}` is not declared in the DSL schema.",
+                        )
+                continue
+            if not self.schema.is_allowed_output_key(str(key)):
+                yield self._warning("UNKNOWN_RULE_OUTPUT_KEY", f"{location}.{key}", f"Output key `{key}` is not declared in the DSL schema.")
 
     def _has_explain(self, rule: Mapping[str, Any]) -> bool:
         direct_explain = rule.get("explain")
