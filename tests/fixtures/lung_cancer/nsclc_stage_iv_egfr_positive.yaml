@@ -1,0 +1,19 @@
+id: nsclc_stage_iv_egfr_positive
+description: НМРЛ IV стадии с EGFR del19, проверяет inference и таргетный маршрут.
+patient_state:
+  diagnostics: [chest_ct_contrast]
+  histology: adenocarcinoma
+  biomarkers: [egfr_ex19del]
+  tnm: {T: T2, N: N1, M: M1b}
+  performance_status: {ecog: 1}
+expected:
+  inferred_state:
+    histology_group: nsclc
+    driver_positive: true
+    driver_gene: EGFR
+    stage_group: stage_iv
+    treatment_intent: palliative
+  matched_rule_ids:
+    - LC_DX_INITIAL_WORKUP_COMPLETE
+    - LC_TX_NSCLC_STAGE_IV_DRIVER_POSITIVE
+  report_sections: [diagnosis, recommendations]

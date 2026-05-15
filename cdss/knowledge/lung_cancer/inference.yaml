@@ -1,0 +1,118 @@
+inference_rules:
+  - id: LC_INF_HISTOLOGY_NSCLC_GROUP
+    description: Группирует аденокарциному, плоскоклеточный, крупноклеточный и НМРЛ БДУ как НМРЛ.
+    if:
+      any:
+        histology: [adenocarcinoma, squamous_nsclc, large_cell, nsclc_nos]
+    then:
+      derive: {histology_group: nsclc}
+      explain: "Морфология относится к немелкоклеточному раку легкого."
+
+  - id: LC_INF_HISTOLOGY_SCLC_GROUP
+    if:
+      any:
+        histology: [small_cell, combined_small_cell]
+    then:
+      derive: {histology_group: sclc}
+      explain: "Морфология относится к мелкоклеточному раку легкого."
+
+  - id: LC_INF_DRIVER_EGFR_COMMON
+    if:
+      any:
+        biomarkers: [egfr_ex19del, egfr_l858r]
+    then:
+      derive:
+        driver_status: egfr_common_activating
+        targeted_option: osimertinib
+      explain: "Выявлена распространенная активирующая мутация EGFR."
+
+  - id: LC_INF_DRIVER_EGFR_ANY
+    if:
+      any:
+        biomarkers: [egfr_ex19del, egfr_l858r, egfr_other_activating]
+    then:
+      derive: {driver_positive: true, driver_gene: EGFR}
+      explain: "Выявлена активирующая мутация EGFR."
+
+  - id: LC_INF_DRIVER_ALK
+    if: {biomarkers: {contains: alk_rearrangement}}
+    then:
+      derive: {driver_positive: true, driver_gene: ALK, targeted_option: alectinib}
+      explain: "Выявлена транслокация ALK."
+
+  - id: LC_INF_DRIVER_ROS1
+    if: {biomarkers: {contains: ros1_rearrangement}}
+    then:
+      derive: {driver_positive: true, driver_gene: ROS1}
+      explain: "Выявлена транслокация ROS1."
+
+  - id: LC_INF_DRIVER_BRAF
+    if: {biomarkers: {contains: braf_v600e}}
+    then:
+      derive: {driver_positive: true, driver_gene: BRAF}
+      explain: "Выявлена мутация BRAF V600E."
+
+  - id: LC_INF_PD_L1_HIGH
+    if: {pd_l1_tps: {gte: 50}}
+    then:
+      derive: {pd_l1_category: high}
+      explain: "PD-L1 TPS ≥50%."
+
+  - id: LC_INF_PD_L1_LOW_POSITIVE
+    if:
+      all:
+        - {pd_l1_tps: {gte: 1}}
+        - {pd_l1_tps: {lt: 50}}
+    then:
+      derive: {pd_l1_category: low_positive}
+      explain: "PD-L1 TPS 1-49%."
+
+  - id: LC_INF_PD_L1_NEGATIVE
+    if: {pd_l1_tps: {lt: 1}}
+    then:
+      derive: {pd_l1_category: negative}
+      explain: "PD-L1 TPS <1%."
+
+  - id: LC_INF_METASTATIC_BY_M1
+    if: {tnm.M: {matches: "^M1"}}
+    then:
+      derive: {stage_group: stage_iv, treatment_intent: palliative}
+      explain: "Наличие M1 определяет IV стадию и паллиативную направленность системного лечения."
+
+  - id: LC_INF_EARLY_RESECTABLE_BUCKET
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_i, stage_ii, stage_iiia]}}
+        - {resectability: resectable}
+    then:
+      derive: {treatment_intent: curative_surgery_based}
+      explain: "Резектабельный НМРЛ I-IIIA относится к хирургически-ориентированному радикальному маршруту."
+
+  - id: LC_INF_UNRESECTABLE_STAGE_III_BUCKET
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_iiia, stage_iiib, stage_iiic]}}
+        - {resectability: unresectable}
+    then:
+      derive: {treatment_intent: curative_chemoradiation_based}
+      explain: "Нерезектабельный местнораспространенный НМРЛ ведется по радикальному ХЛТ-маршруту при переносимости."
+
+  - id: LC_INF_SCLC_LIMITED
+    if:
+      all:
+        - {histology_group: sclc}
+        - {sclc_extent: limited}
+    then:
+      derive: {treatment_intent: curative_chemoradiation_based}
+      explain: "Локализованный МРЛ рассматривается для комбинированного радикального лечения."
+
+  - id: LC_INF_SCLC_EXTENSIVE
+    if:
+      all:
+        - {histology_group: sclc}
+        - {sclc_extent: extensive}
+    then:
+      derive: {treatment_intent: palliative_systemic}
+      explain: "Распространенный МРЛ требует системного паллиативного маршрута."

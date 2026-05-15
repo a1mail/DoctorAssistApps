@@ -1,0 +1,108 @@
+diagnosis_rules:
+  - id: LC_DX_SUSPECT_LUNG_CANCER
+    if:
+      any:
+        complaints: [hemoptysis, persistent_cough, dyspnea, chest_pain, weight_loss]
+        imaging_findings: [lung_mass, atelectasis, suspicious_nodule, mediastinal_nodes, pleural_effusion]
+    then:
+      status: suspected_lung_cancer
+      required_next_data:
+        - chest_ct_contrast
+        - tissue_verification
+        - smoking_and_occupational_history
+      explain: "Клиника или визуализация подозрительны на рак легкого; требуется КТ и морфологическая верификация."
+
+  - id: LC_DX_INITIAL_WORKUP_COMPLETE
+    if:
+      all:
+        - {diagnostics: {contains: chest_ct_contrast}}
+        - {histology: {exists: true}}
+        - {tnm.T: {exists: true}}
+        - {tnm.N: {exists: true}}
+        - {tnm.M: {exists: true}}
+        - {performance_status.ecog: {exists: true}}
+    then:
+      status: initial_workup_complete
+      explain: "Есть КТ грудной клетки, морфология, TNM и ECOG для первичного маршрута."
+
+  - id: LC_DX_MISSING_TISSUE
+    if: {histology: {missing: true}}
+    then:
+      status: diagnosis_incomplete
+      missing_data:
+        - histology
+        - biopsy_method_selection
+      recommend_diagnostics:
+        - bronchoscopy_biopsy
+        - transthoracic_biopsy
+        - ebus_eus_if_mediastinal_nodes
+        - thoracoscopy_if_pleural_effusion
+      explain: "Без морфологической верификации лечение не должно выбираться как окончательное."
+
+  - id: LC_DX_MISSING_STAGE
+    if:
+      any:
+        tnm.T: {missing: true}
+        tnm.N: {missing: true}
+        tnm.M: {missing: true}
+        stage_group: {missing: true}
+    then:
+      status: staging_incomplete
+      recommend_diagnostics:
+        - chest_ct_contrast
+        - abdomen_ct_or_us
+        - brain_mri_contrast_or_brain_ct_contrast
+        - pet_ct_when_radical_treatment_or_uncertain_metastases
+        - bone_scan_when_bone_symptoms_or_uncertain_bone_lesions
+      explain: "Для выбора радикального/паллиативного маршрута нужно завершить стадирование."
+
+  - id: LC_DX_NSCLC_BIOMARKERS_REQUIRED_ADVANCED
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_iiib, stage_iiic, stage_iv]}}
+    then:
+      required_biomarkers:
+        - EGFR_18_21
+        - ALK
+        - ROS1
+        - BRAF_V600E
+        - PD_L1_TPS
+        - consider_extended_NGS_MET_RET_NTRK_KRAS_HER2
+      explain: "Для местнораспространенного/метастатического НМРЛ выбор терапии зависит от драйверов и PD-L1."
+
+  - id: LC_DX_NONSQUAMOUS_BIOMARKERS_REQUIRED
+    if:
+      all:
+        - {histology: {in: [adenocarcinoma, large_cell, nsclc_nos]}}
+        - {stage_group: {in: [stage_i, stage_ii, stage_iiia, stage_iiib, stage_iiic, stage_iv]}}
+    then:
+      required_biomarkers:
+        - EGFR_18_21
+        - ALK
+        - ROS1
+        - BRAF_V600E
+        - PD_L1_TPS
+      explain: "Неплоскоклеточный НМРЛ требует молекулярного профиля для адъювантного, консолидирующего или паллиативного выбора."
+
+  - id: LC_DX_RESECTABILITY_BOARD_REQUIRED
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_i, stage_ii, stage_iiia]}}
+    then:
+      required_decisions:
+        - thoracic_surgeon_resectability
+        - anesthesiology_risk
+        - pulmonary_function_operability
+        - multidisciplinary_tumor_board
+      explain: "Резектабельность и функциональная операбельность должны быть определены до выбора радикального метода."
+
+  - id: LC_DX_SCLC_EXTENT_REQUIRED
+    if: {histology_group: sclc}
+    then:
+      required_data:
+        - sclc_extent_limited_or_extensive
+        - brain_imaging
+        - metastatic_workup
+      explain: "Для МРЛ требуется определить локализованную или распространенную стадию."

@@ -1,0 +1,43 @@
+scenario_rules:
+  - id: LC_SC_HISTOLOGY_UNKNOWN
+    when_missing: [histology]
+    generate_branches:
+      - {branch_id: possible_nsclc, assumptions: {histology_group: nsclc}, required_to_resolve: [tissue_verification]}
+      - {branch_id: possible_sclc, assumptions: {histology_group: sclc}, required_to_resolve: [tissue_verification]}
+    explain: "До морфологии система строит отдельные ветви НМРЛ и МРЛ без окончательной рекомендации лечения."
+
+  - id: LC_SC_NSCLC_DRIVER_UNKNOWN_STAGE_IV
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: stage_iv}
+    when_missing:
+      - EGFR_18_21
+      - ALK
+      - ROS1
+      - BRAF_V600E
+      - PD_L1_TPS
+    generate_branches:
+      - {branch_id: driver_positive, assumptions: {driver_positive: true}, preferred_route: matched_targeted_therapy}
+      - {branch_id: driver_negative_pdl1_high, assumptions: {driver_positive: false, pd_l1_category: high}, preferred_route: immunotherapy_or_chemoimmunotherapy}
+      - {branch_id: driver_negative_pdl1_low_negative, assumptions: {driver_positive: false, pd_l1_category: low_or_negative}, preferred_route: chemotherapy_or_chemoimmunotherapy}
+    explain: "При IV стадии НМРЛ отсутствие молекулярного профиля меняет первую линию, поэтому формируются ветви по драйверам и PD-L1."
+
+  - id: LC_SC_RESECTABILITY_UNKNOWN_STAGE_I_IIIA
+    if:
+      all:
+        - {histology_group: nsclc}
+        - {stage_group: {in: [stage_i, stage_ii, stage_iiia]}}
+    when_missing: [resectability, operability]
+    generate_branches:
+      - {branch_id: resectable_operable, assumptions: {resectability: resectable, operability: operable}, preferred_route: surgery_based_curative}
+      - {branch_id: unresectable_or_inoperable, assumptions: {resectability: unresectable_or_inoperable}, preferred_route: definitive_rt_or_chemoradiation}
+    explain: "Для I-IIIA НМРЛ ключевая развилка — резектабельность и функциональная операбельность."
+
+  - id: LC_SC_SCLC_EXTENT_UNKNOWN
+    if: {histology_group: sclc}
+    when_missing: [sclc_extent]
+    generate_branches:
+      - {branch_id: limited_sclc, assumptions: {sclc_extent: limited}, preferred_route: platinum_etoposide_plus_thoracic_rt}
+      - {branch_id: extensive_sclc, assumptions: {sclc_extent: extensive}, preferred_route: systemic_palliative_therapy}
+    explain: "МРЛ требует разделения на локализованную и распространенную стадию."

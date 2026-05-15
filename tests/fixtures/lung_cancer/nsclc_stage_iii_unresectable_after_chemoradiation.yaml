@@ -1,0 +1,19 @@
+id: nsclc_stage_iii_unresectable_after_chemoradiation
+description: Нерезектабельная III стадия НМРЛ после ХЛТ, проверяет консолидирующий дурвалумаб.
+patient_state:
+  histology: adenocarcinoma
+  stage_group: stage_iiib
+  resectability: unresectable
+  chemoradiation_completed: true
+  progression_after_chemoradiation: false
+  biomarkers: []
+  pd_l1_tps: 10
+  no_immunotherapy_contraindication: true
+expected:
+  inferred_state:
+    histology_group: nsclc
+    treatment_intent: curative_chemoradiation_based
+    pd_l1_category: low_positive
+  matched_rule_ids:
+    - LC_TX_NSCLC_STAGE_III_DURVALUMAB_CONSOLIDATION
+  report_sections: [recommendations]

@@ -1,0 +1,73 @@
+backward_planning_rules:
+  - id: LC_BW_TARGETED_THERAPY_REQUIREMENTS
+    target_treatment: matched_targeted_therapy
+    requires:
+      diagnosis: nsclc
+      stage_group: stage_iv_or_unresectable_advanced
+      biomarkers:
+        one_of: [EGFR_18_21, ALK, ROS1, BRAF_V600E, MET_ex14, RET, NTRK, KRAS_G12C, HER2]
+      diagnostics:
+        - adequate_tissue_or_valid_liquid_biopsy
+        - baseline_ct_measurable_disease
+        - ecog
+        - organ_function_labs
+    missing_data_plan:
+      - obtain_or_repeat_biopsy_if_insufficient_material
+      - order_molecular_testing_or_NGS
+      - delay_nonurgent_immunotherapy_until_driver_status_known_when_possible
+    explain: "Для подбора таргетной терапии при распространенном НМРЛ требуется подтвердить драйверное нарушение и базовую пригодность к системному лечению."
+
+  - id: LC_BW_DURVALUMAB_REQUIREMENTS
+    target_treatment: durvalumab_consolidation
+    requires:
+      diagnosis: nsclc
+      stage_group: unresectable_stage_iii
+      prior_treatment: completed_definitive_chemoradiation
+      disease_status: no_progression
+      biomarkers:
+        - PD_L1_TPS
+        - EGFR_ALK_negative
+      contraindications_absent:
+        - immunotherapy_absolute_or_high_risk_contraindication
+    missing_data_plan:
+      - document_end_date_of_chemoradiation
+      - restage_for_progression
+      - confirm_PD_L1_and_EGFR_ALK
+      - screen_for_pneumonitis_and_autoimmune_disease
+    explain: "Консолидирующий дурвалумаб требует завершенной радикальной ХЛТ, отсутствия прогрессирования, профиля PD-L1/EGFR/ALK и оценки противопоказаний к иммунотерапии."
+
+  - id: LC_BW_SURGERY_REQUIREMENTS
+    target_treatment: lung_resection
+    requires:
+      diagnosis: nsclc
+      stage_group: potentially_resectable_i_ii_iiia
+      diagnostics:
+        - chest_ct_contrast
+        - mediastinal_staging_when_nodes_or_central_tumor
+        - distant_metastasis_exclusion
+        - pulmonary_function_tests
+        - cardiac_risk_assessment
+      decisions:
+        - thoracic_surgeon_resectability
+        - multidisciplinary_board
+    missing_data_plan:
+      - complete_staging
+      - perform_EBUS_EUS_or_mediastinoscopy_if_indicated
+      - assess_FEV1_DLCO_and_predicted_postoperative_values
+    explain: "Хирургический маршрут требует подтверждения резектабельной стадии, исключения отдаленных метастазов и оценки функциональной операбельности."
+
+  - id: LC_BW_SCLC_CHEMORADIATION_REQUIREMENTS
+    target_treatment: sclc_limited_chemoradiation
+    requires:
+      diagnosis: small_cell_lung_cancer
+      extent: limited
+      ecog: 0_to_2_preferred
+      diagnostics:
+        - brain_mri_or_ct
+        - thoracoabdominal_staging
+        - labs_for_platinum_etoposide
+    missing_data_plan:
+      - determine_limited_vs_extensive_stage
+      - document_radiation_feasibility
+      - assess_platinum_fitness
+    explain: "Для ХЛТ при локализованном МРЛ нужно подтвердить ограниченную распространенность, возможность лучевой терапии и переносимость платино-этопозидного режима."

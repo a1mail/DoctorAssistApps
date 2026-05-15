@@ -1,0 +1,16 @@
+id: nsclc_stage_iv_driver_negative_pdl1_high
+description: НМРЛ IV стадии без драйверов, PD-L1 высокий, проверяет иммунотерапевтическую ветвь.
+patient_state:
+  histology: adenocarcinoma
+  stage_group: stage_iv
+  driver_positive: false
+  biomarkers: []
+  pd_l1_tps: 80
+  no_immunotherapy_contraindication: true
+expected:
+  inferred_state:
+    histology_group: nsclc
+    pd_l1_category: high
+  matched_rule_ids:
+    - LC_TX_NSCLC_STAGE_IV_NO_DRIVER_PD_L1_HIGH
+  report_sections: [recommendations]

@@ -1,0 +1,96 @@
+entities:
+  symptoms:
+    - {id: cough, label: Кашель, type: Symptom}
+    - {id: hemoptysis, label: Кровохарканье, type: Symptom}
+    - {id: dyspnea, label: Одышка, type: Symptom}
+    - {id: chest_pain, label: Боль в грудной клетке, type: Symptom}
+    - {id: weight_loss, label: Потеря массы тела, type: Symptom}
+    - {id: fever, label: Лихорадка, type: Symptom}
+    - {id: hoarseness, label: Осиплость голоса, type: Symptom}
+    - {id: bone_pain, label: Боль в костях, type: Symptom}
+    - {id: neurologic_symptoms, label: Неврологическая симптоматика, type: Symptom}
+  risk_factors:
+    - {id: active_smoking, label: Активное курение, type: Anamnesis}
+    - {id: passive_smoking, label: Пассивное курение, type: Anamnesis}
+    - {id: occupational_asbestos, label: Контакт с асбестом, type: Anamnesis}
+    - {id: occupational_chromium_nickel_cadmium_arsenic, label: Контакт с хромом/никелем/кадмием/мышьяком, type: Anamnesis}
+    - {id: diesel_exposure, label: Контакт с дизельным топливом/выхлопами, type: Anamnesis}
+    - {id: copd, label: ХОБЛ/хроническое заболевание легких, type: Comorbidity}
+  performance_status:
+    - {id: ecog_0, label: ECOG 0, type: Finding}
+    - {id: ecog_1, label: ECOG 1, type: Finding}
+    - {id: ecog_2, label: ECOG 2, type: Finding}
+    - {id: ecog_3, label: ECOG 3, type: Finding}
+    - {id: ecog_4, label: ECOG 4, type: Finding}
+  diagnostics:
+    - {id: chest_ct_contrast, label: КТ органов грудной клетки с контрастированием, type: ImagingResult}
+    - {id: abdomen_ct_or_us, label: КТ/УЗИ органов брюшной полости и забрюшинного пространства, type: ImagingResult}
+    - {id: brain_mri_contrast, label: МРТ головного мозга с контрастированием, type: ImagingResult}
+    - {id: brain_ct_contrast, label: КТ головного мозга с контрастированием, type: ImagingResult}
+    - {id: pet_ct, label: ПЭТ-КТ, type: ImagingResult}
+    - {id: bone_scan, label: Сцинтиграфия костей всего тела, type: ImagingResult}
+    - {id: bronchoscopy_biopsy, label: Бронхоскопия с биопсией, type: Exam}
+    - {id: transthoracic_biopsy, label: Трансторакальная биопсия, type: Exam}
+    - {id: ebus_eus, label: EBUS/EUS медиастинальных лимфоузлов, type: Exam}
+    - {id: thoracoscopy, label: Торакоскопия/биопсия плевры, type: Procedure}
+    - {id: spirometry, label: Спирометрия/оценка функции дыхания, type: Exam}
+    - {id: ecg, label: ЭКГ, type: Exam}
+    - {id: echo, label: ЭхоКГ, type: Exam}
+    - {id: cbc, label: Общий анализ крови, type: LabResult}
+    - {id: biochemistry, label: Биохимический анализ крови, type: LabResult}
+    - {id: coagulation, label: Коагулограмма, type: LabResult}
+  histology:
+    - {id: nsclc, label: Немелкоклеточный рак легкого, type: Histology}
+    - {id: adenocarcinoma, label: Аденокарцинома, type: Histology}
+    - {id: squamous_nsclc, label: Плоскоклеточный НМРЛ, type: Histology}
+    - {id: large_cell, label: Крупноклеточный рак, type: Histology}
+    - {id: nsclc_nos, label: НМРЛ БДУ, type: Histology}
+    - {id: small_cell, label: Мелкоклеточный рак легкого, type: Histology}
+    - {id: combined_small_cell, label: Комбинированный МРЛ, type: Histology}
+  biomarkers:
+    - {id: egfr_ex19del, label: EGFR del19, type: GeneticMutation}
+    - {id: egfr_l858r, label: EGFR L858R, type: GeneticMutation}
+    - {id: egfr_other_activating, label: EGFR другая активирующая мутация 18-21 экзонов, type: GeneticMutation}
+    - {id: alk_rearrangement, label: ALK транслокация, type: GeneticMutation}
+    - {id: ros1_rearrangement, label: ROS1 транслокация, type: GeneticMutation}
+    - {id: braf_v600e, label: BRAF V600E, type: GeneticMutation}
+    - {id: kras_g12c, label: KRAS G12C, type: GeneticMutation}
+    - {id: met_ex14_skipping, label: MET exon 14 skipping, type: GeneticMutation}
+    - {id: ntrk_fusion, label: NTRK fusion, type: GeneticMutation}
+    - {id: ret_fusion, label: RET fusion, type: GeneticMutation}
+    - {id: her2_mutation, label: HER2 mutation, type: GeneticMutation}
+    - {id: pd_l1_tps, label: PD-L1 TPS, type: Biomarker}
+  stages:
+    - {id: occult_carcinoma, label: Скрытый рак, type: Stage}
+    - {id: stage_0, label: Стадия 0, type: Stage}
+    - {id: stage_i, label: Стадия I, type: Stage}
+    - {id: stage_ii, label: Стадия II, type: Stage}
+    - {id: stage_iiia, label: Стадия IIIA, type: Stage}
+    - {id: stage_iiib, label: Стадия IIIB, type: Stage}
+    - {id: stage_iiic, label: Стадия IIIC, type: Stage}
+    - {id: stage_iv, label: Стадия IV, type: Stage}
+    - {id: sclc_limited, label: МРЛ локализованная стадия, type: Stage}
+    - {id: sclc_extensive, label: МРЛ распространенная стадия, type: Stage}
+  treatments:
+    - {id: surgery_lobectomy, label: Лобэктомия/анатомическая резекция с лимфодиссекцией, type: Procedure}
+    - {id: surgery_pneumonectomy, label: Пневмонэктомия по показаниям, type: Procedure}
+    - {id: stereotactic_rt, label: Стереотаксическая лучевая терапия, type: Treatment}
+    - {id: concurrent_chemoradiation, label: Одновременная химиолучевая терапия, type: Treatment}
+    - {id: sequential_chemoradiation, label: Последовательная химиолучевая терапия, type: Treatment}
+    - {id: platinum_doublet, label: Платиносодержащая двухкомпонентная ХТ, type: DrugRegimen}
+    - {id: durvalumab_consolidation, label: Консолидирующий дурвалумаб, type: DrugRegimen}
+    - {id: osimertinib, label: Осимертиниб, type: DrugRegimen}
+    - {id: alectinib, label: Алектиниб, type: DrugRegimen}
+    - {id: atezolizumab, label: Атезолизумаб, type: DrugRegimen}
+    - {id: pembrolizumab, label: Пембролизумаб, type: DrugRegimen}
+    - {id: nivolumab, label: Ниволумаб, type: DrugRegimen}
+    - {id: palliative_systemic_therapy, label: Паллиативная системная терапия, type: Treatment}
+    - {id: best_supportive_care, label: Симптоматическая и поддерживающая терапия, type: Treatment}
+  comorbidities:
+    - {id: heart_failure, label: Сердечная недостаточность, type: Comorbidity}
+    - {id: renal_failure, label: Почечная недостаточность, type: Comorbidity}
+    - {id: hearing_loss_neuropathy, label: Тугоухость/нейропатия, type: Comorbidity}
+    - {id: autoimmune_disease_active, label: Активное аутоиммунное заболевание, type: Comorbidity}
+    - {id: interstitial_lung_disease, label: Интерстициальное заболевание легких/пневмонит, type: Comorbidity}
+    - {id: uncontrolled_infection, label: Неконтролируемая инфекция, type: Comorbidity}
+    - {id: poor_ps_ecog_3_4, label: ECOG 3-4, type: Constraint}

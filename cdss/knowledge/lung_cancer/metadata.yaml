@@ -1,0 +1,56 @@
+pack:
+  id: lung_cancer_ru_kr_2025
+  disease: malignant_neoplasm_of_bronchus_and_lung
+  disease_ru: Злокачественное новообразование бронхов и легкого
+  icd10: [C34]
+  age_group: adults
+  guideline_level: "Клинические рекомендации РФ"
+  status: executable_knowledge_pack
+  language: ru
+  version: 0.1.0
+  created_at: "2026-05-06"
+  owner: DoctorAssistApps / Oncology CDSS
+
+source_of_truth:
+  title: "Клинические рекомендации: Злокачественное новообразование бронхов и легкого"
+  year: 2025
+  organizations:
+    - "Ассоциация онкологов России"
+    - "Российское общество клинической онкологии"
+  url: "https://oncology-association.ru/wp-content/uploads/2025/12/zno_rl_bronhov_proekt.pdf"
+  source_policy: "Единственный клинический референс пакета; правила должны трассироваться к source_map.rule_sources."
+
+scope:
+  includes:
+    - жалобы и анамнез
+    - первичная диагностика и стадирование
+    - морфологическая верификация
+    - молекулярно-генетическое и иммуногистохимическое профилирование
+    - НМРЛ: ранние, местнораспространенные и IV стадии
+    - МРЛ: локализованная и распространенная стадии
+    - поддерживающая и сопроводительная терапия
+    - диспансерное наблюдение
+  excludes:
+    - автоматический расчет доз лекарств
+    - замена врачебного решения
+    - использование нероссийских гайдов как источника правил
+
+engine_contract:
+  patient_state_required_namespaces:
+    - demographics
+    - complaints
+    - history
+    - performance_status
+    - diagnostics
+    - histology
+    - biomarkers
+    - tnm
+    - stage
+    - treatment_intent
+    - comorbidities
+    - medications
+  evaluation:
+    deterministic: true
+    immutable_state_during_evaluation: true
+    explainability_required: true
+    all_outputs_reference_rule_id: true
